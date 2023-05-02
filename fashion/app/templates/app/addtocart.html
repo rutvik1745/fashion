@@ -1,0 +1,147 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Cart{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+ <div class="row">
+  <h1 class="text-center mb-5">Shopping Cart</h1>
+  <div class="col-sm-8">
+  <div class="card">
+   <div class="card-body">
+    <h3>Cart</h3>
+    <hr>
+    {% for cart in carts %}
+    <div class="row">
+     <div class="col-sm-3 text-center align-self-center">
+      <img src="{{cart.product.image1.url}}" alt="" srcset="" 
+      class="img-fluid img-thumbnail shadow-sm" height="150" width="150"> </div>
+     <div class="col-sm-9">
+      <div>
+       <h5>{{cart.product.title}}</h5>
+       <p class="mb-2 text-muted small">{{cart.product.name}}</p>
+       <div class="my-3">
+        <label for="quantity">Quantity:</label>
+        <a class="minus-cart btn"pid="{{cart.product.id}}"><i class="fas 
+          fa-minus-square fa-lg"></i></a>
+          <span id="quantity_{{cart.product.id}}">{{cart.quantity}} </span>
+        <a class="plus-cart btn"pid="{{cart.product.id}}"><i class="fas 
+          fa-plus-square fa-lg"></i></a>
+       </div> 
+       <div class="d-flex justify-content-between">
+        <a href="#" class="btn btn-sm btn-secondary mr-3 remove-cart"pid="{{cart.product.id}}">Remove item </a>
+        <p class="mb-0"><span><strong>Rs. {{cart.product.discounted_price}}</strong></span></p>
+       </div>
+      </div>
+     </div>
+    </div>
+    <hr>
+    {% endfor %}
+    <hr class="text-muted">
+    <div class="row my-5">
+     
+     <div class="col-sm-9"> 
+      <div>
+       
+      </div>
+     </div>
+    </div>
+   </div>
+   </div>
+  </div>
+
+  <div class="col-sm-4">
+   <div class="card">
+    <div class="card-body">
+      <h3>The Total Amount of</h3>
+      <ul class="list-group">
+       <li class="list-group-item d-flex 
+       justify-content-between align-items-center border-0 
+       px-0 pb-0">Amount<span>Rs. <span id ="amount">{{amount}}</span></span></li>
+       <li class="list-group-item d-flex 
+       justify-content-between align-items-center px-0">
+       Shipping<span>Rs. 70.00</span></li>
+       <li class="list-group-item d-flex 
+       justify-content-between align-items-center border-0 
+       px-0 mb-3">
+        <div>
+           <strong>Total</strong> <small>(including VAT)</small>
+         </div>
+         <span><strong>Rs. <strong id="totalamount">{{totalamount}}</strong></strong></span>
+       </li>
+      </ul>
+      <div class="d-grid"><a href="{% url 'checkout' %}" class="btn btn-primary">Place Order</a></div>
+    </div>
+   </div>
+  </div>
+  
+ </div>
+</div>
+<div class="container">
+ <div class="row">
+  <div class="col-sm-8">
+   <div class="card">
+    <div class="card-body">
+      <h5 class="mb-4">We accept</h5>
+      <img src="{% static 'app/images/payment.png' %}" alt="" class="img-fluid">
+    </div>
+  </div>
+  </div>
+ </div>
+</div>
+<!-- Include jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  // Check if quantity is 1 and disable minus button on page load for each item
+  $(document).ready(function() {
+    $('.minus-cart').each(function() {
+      var quantityElement = $('#quantity_' + $(this).attr('pid'));
+      var quantity = parseInt(quantityElement.text());
+      if (quantity === 1) {
+        $(this).addClass('disabled');
+        $(this).attr('disabled', 'disabled');
+      }
+    });
+  });
+
+  // Event listener for minus button click for each item
+  $(document).on('click', '.minus-cart', function() {
+    var quantityElement = $('#quantity_' + $(this).attr('pid'));
+    var quantity = parseInt(quantityElement.text());
+    if (quantity > 1) {
+      quantityElement.text(quantity - 1);
+    }
+
+    // Update localStorage with new quantity
+    var productId = $(this).attr('pid');
+    localStorage.setItem('quantity_' + productId, quantity - 1);
+
+    // Disable minus button if quantity is 1
+    if (quantity - 1 === 1) {
+      $(this).addClass('disabled');
+      $(this).attr('disabled', 'disabled');
+    }
+
+    // Enable plus button
+    var plusBtn = $('.plus-cart[pid="' + productId + '"]');
+    plusBtn.removeClass('disabled');
+    plusBtn.removeAttr('disabled');
+  });
+
+  // Event listener for plus button click for each item
+  $(document).on('click', '.plus-cart', function() {
+    var quantityElement = $('#quantity_' + $(this).attr('pid'));
+    var quantity = parseInt(quantityElement.text());
+    quantityElement.text(quantity + 1);
+
+    // Update localStorage with new quantity
+    var productId = $(this).attr('pid');
+    localStorage.setItem('quantity_' + productId, quantity + 1);
+
+    // Enable minus button
+    var minusBtn = $('.minus-cart[pid="' + productId + '"]');
+    minusBtn.removeClass('disabled');
+    minusBtn.removeAttr('disabled');
+  });
+</script>
+{% endblock main-content %}

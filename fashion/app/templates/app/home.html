@@ -1,0 +1,192 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Home{% endblock title %}
+
+{% block banner_slider %}
+
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="hero__slider owl-carousel">
+            <div class="hero__items set-bg" data-setbg="{% static 'app/img/hero/hero-1.jpg' %}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-5 col-lg-7 col-md-8">
+                            <div class="hero__text">
+                                <h6>Summer Collection</h6>
+                                <h2>Fall - Summer Collections 2023</h2>
+                                <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
+                                commitment to exceptional quality.</p>
+                                <a href="{% url 'shop' %}" class="primary-btn zoom" style="text-decoration: none;">Shop now <span class="arrow_right"></span></a>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero__items set-bg" data-setbg="{% static 'app/img/hero/hero-2.jpg' %}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-5 col-lg-7 col-md-8">
+                            <div class="hero__text">
+                                <h6>Summer Collection</h6>
+                                <h2>Fall - Summer Collections 2023</h2>
+                                <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
+                                commitment to exceptional quality.</p>
+                                <a href="{% url 'shop' %}" class="primary-btn zoom"  style="text-decoration: none;">Shop now <span class="arrow_right"></span></a>
+                             
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Section End -->
+<!-- End Banner Slider -->
+{% endblock banner_slider %}
+
+
+
+{% block main-content %}
+
+  <!-- Banner Section Begin -->
+    <section class="banner spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 offset-lg-4">
+                    <div class="banner__item">
+                         {%for m in men|slice:":1" %}
+                        <div class="banner__item__pic">
+                            <img src="{{m.image1.url}}" alt="">
+                        </div>
+                         
+                        <div class="banner__item__text">
+                            <h2>Latest Man Collection 2023</h2>
+                            <a href="{% url 'product-detail' m.id%}">Shop now</a>
+                        </div>
+                         {% endfor %}
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="banner__item banner__item--middle">
+                        {%for w in women|slice:":1" %}
+                        <div class="banner__item__pic">
+                            <img src="{{w.image1.url}}" alt="">
+                        </div>
+                         
+                        <div class="banner__item__text">
+                            <h2>Latest Women Collection 2023</h2>
+                            <a href="{% url 'product-detail' w.id%}">Shop now</a>
+                        </div>
+                         {% endfor %}
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="banner__item banner__item--last">
+                        {%for k in kids|slice:":1" %}
+                        <div class="banner__item__pic">
+                            <img src="{{k.image1.url}}" alt="">
+                        </div>
+                         
+                        <div class="banner__item__text">
+                            <h2>Latest Kids Collection 2023</h2>
+                            <a href="{% url 'product-detail' k.id%}">Shop now</a>
+                        </div>
+                         {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Banner Section End -->
+    <!-- Product Section Begin -->
+    <section class="product spad my-5">
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-12">
+                  <ul class="filter__controls">
+                     
+                      <li data-filter=".men">Men</li>
+                      <li data-filter=".women">Women</li>
+                      <li data-filter=".kids">Kids</li>
+                  </ul>
+              </div>
+          </div>
+          <div class="row product__filter">
+            {%for m in men|slice:":8" %}
+              <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix men">
+                
+                  <div class="product__item zoom">
+                    <a href="{% url 'product-detail' m.id%}">
+                      <div class="product__item__pic set-bg" data-setbg="{{m.image1.url}}">
+                          
+                      </div>
+                    </a>
+                      <div class="product__item__text" style="margin-top: 10%;">
+                          <h6>{{m.name}}</h6>
+                          <form action="/add-to-cart" class ="d-inline product-form">
+                                {% csrf_token %}
+                                <input type ="hidden"  name="prod_id" value="{{m.id}}" id="prod_id">
+                                <button type ="sumbit" class="btn btn-primary shadow px-5 py-2">Add to Cart</button>
+                          </form>
+                          <h5 style="font-weight: bold; margin-top: 5%;">Rs. {{m.discounted_price}}</h5>
+                      </div>
+                    
+                      
+                  </div>
+                  
+              </div>
+              {% endfor %}
+              {%for w in women|slice:":8" %}
+              <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix women">
+                  <div class="product__item zoom">
+                    <a href="{% url 'product-detail' w.id%}">
+                      <div class="product__item__pic set-bg" data-setbg="{{w.image1.url}}">
+                     
+                      </div>
+                    </a>
+                      <div class="product__item__text" style="margin-top: 10%;">
+                          <h6>{{w.name}}</h6>
+                          <form action="/add-to-cart" class ="d-inline product-form">
+                            {% csrf_token %}
+                            <input type ="hidden"  name="prod_id" value="{{w.id}}" id="prod_id">
+                            <button type ="sumbit" class="btn btn-primary shadow px-5 py-2">Add to Cart</button> 
+                      </form>
+                          
+                          <h5 style="font-weight: bold; margin-top: 5%;">Rs. {{w.discounted_price}}</h5>
+                        
+                      </div>
+                  </div>
+              </div>
+              {% endfor %}
+              {%for k in kids|slice:":8" %}
+              <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix kids">
+                  <div class="product__item zoom">
+                    <a href="{% url 'product-detail' k.id%}">
+                      <div class="product__item__pic set-bg" data-setbg="{{k.image1.url}}">
+                      
+                      </div>
+                    </a>
+                      <div class="product__item__text" style="margin-top: 10%;">
+                          <h6>{{k.name}}</h6>
+                          <form action="/add-to-cart" class ="d-inline product-form">
+                            {% csrf_token %}
+                            <input type ="hidden"  name="prod_id" value="{{k.id}}" id="prod_id">
+                            <button type ="sumbit" class="btn btn-primary shadow px-5 py-2">Add to Cart</button>     
+                      </form>
+                          
+                          <h5 style="font-weight: bold; margin-top: 5%;">Rs. {{k.discounted_price}}</h5>
+                          
+                      </div>
+                  </div>
+              </div>
+              {% endfor %}
+             
+           
+          </div>
+      </div>
+  </section>
+  <!-- Product Section End -->
+
+ 
+{% endblock main-content %}

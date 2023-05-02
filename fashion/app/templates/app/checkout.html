@@ -1,0 +1,48 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Buy Now{% endblock title %}
+{% block main-content %}
+<div class="container">
+ <div class="row mt-5">
+  <div class="col-sm-6">
+    <h4>Order Summary</h4>
+    <hr>
+    {% for item in cart_items %}
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5>Product: {{item.product.name}}</h5>
+          <p>Quantity: {{item.quantity}}</p>
+          <p class="fw-bold">Price: {{item.total_cost}}</p>
+        </div>
+      </div>
+    {% endfor %}
+    <p class="fw-bold"> Total cost + R.s 70 ={{totalamount}}</p>
+    <small></small>
+  </div>
+  <div class="col-sm-4 offset-sm-1">
+    <h4>Shipping Address</h4>
+    <hr>
+    <form action="/paymentdone">
+      {% for ad in add %}
+      {% if ad.name %}
+      <div class="card">
+        <div class="card-body">
+        <h5>{{ad.name}}</h5>
+        <p>{{ad.address}},{{ad.city}},{{ad.state}},{{ad.zipcode}}</p>
+        </div>
+      </div>
+      <b>Only Cash On Delivery Available</b>
+      <button type="submit" name="custid"  id="custadd" value="{{ad.id}}" class="btn btn-warning mt-3 px-5 fw-bold">Pay</button> 
+      
+      {% else %}
+      <button class="btn btn-primary mt-3 px-5 fw-bold text-white"><a href="{% url 'profile' %}">Add Address</a></button>
+      {% endif%}
+         
+        {% endfor %}
+        <div class="text-end">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock main-content %}
